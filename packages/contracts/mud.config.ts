@@ -1,8 +1,9 @@
 import { mudConfig } from "@latticexyz/world/register";
 
-const ADMINS = ["0xe71D06F3720908FA56cfC88d7F37dbEca8a0DE61"];
+const ADMINS = [process.env.ADDRESS as string];
 
 export default mudConfig({
+  excludeSystems: ["ChainLinkFunctionSystem"],
   systems: {
     ChainLinkFunctionSystem: {
       openAccess: true,
@@ -10,6 +11,9 @@ export default mudConfig({
     ConfigSystem: {
       openAccess: false,
       accessList: [...ADMINS],
+    },
+    TokenSystem: {
+      openAccess: true,
     },
   },
   tables: {
@@ -19,6 +23,13 @@ export default mudConfig({
         subscriptionId: "uint64",
         callbackGasLimit: "uint32",
         source: "string",
+      },
+    },
+    Config: {
+      keySchema: {},
+      valueSchema: {
+        mintPrice: "uint256",
+        receiver: "address",
       },
     },
     ChainLinkRequest: {
@@ -69,6 +80,20 @@ export default mudConfig({
       keySchema: { owner: "address", spender: "address" },
       valueSchema: "bool",
       tableIdArgument: true,
+    },
+    AweiTokenScore: {
+      keySchema: {
+        tokenId: "uint256",
+      },
+      valueSchema: {
+        score: "uint256",
+      },
+    },
+    ClaimRecord: {
+      keySchema: {
+        key: "bytes32",
+      },
+      valueSchema: "bool",
     },
   },
 });

@@ -13,4 +13,8 @@ interface IConfigSystem {
   function setSubscriptionId(uint64 _subscriptionId) external;
 
   function setCallbackGasLimit(uint32 _callbackGasLimit) external;
+
+  function setMintPrice(uint256 _price) external;
+
+  function setReceiver(address _receiver) external;
 }

@@ -17,6 +17,7 @@ contract PostDeploy is Script {
     function run(address worldAddress) external {
         // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        address deployerAddress = vm.envAddress("ADDRESS");
         IWorld world = IWorld(worldAddress);
 
         // Start broadcasting transactions from the deployer account
@@ -27,7 +28,9 @@ contract PostDeploy is Script {
         world.setSubscriptionId(394);
         world.setCallbackGasLimit(1);
         ERC721Registration.install(world, "Awei Token", "AWEI");
-        world.mint();
+        world.setMintPrice(0.01 ether);
+        world.setReceiver(deployerAddress);
+        world.mint{value: 0.01 ether}();
 
         vm.stopBroadcast();
     }
