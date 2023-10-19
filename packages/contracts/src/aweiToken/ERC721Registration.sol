@@ -17,7 +17,15 @@ library ERC721Registration {
     ) internal {
         ERC721Proxy proxy = new ERC721Proxy(world, namespace);
 
-        ResourceId metadataTableId = registerTables(world, namespace);
+        ResourceId metadataTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    bytes14(namespace),
+                    bytes16("AweiTokenMetadat")
+                )
+            )
+        );
 
         address proxyAddress = address(proxy);
 
