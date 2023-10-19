@@ -8,8 +8,7 @@ import {ResourceId, ResourceIdLib} from "@latticexyz/store/src/ResourceId.sol";
 import {WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE} from "@latticexyz/store/src/storeResourceTypes.sol";
 import {ERC721Registration} from "../src/aweiToken/ERC721Registration.sol";
-import {AweiTokenBalance} from "../src/codegen/index.sol";
-import {AweiToken, AweiTokenMetadata, AweiTokenBalance, AweiTokenApproval} from "../src/codegen/index.sol";
+import {TxHashToChainLinkRequest, ChainLinkRequest} from "../src/codegen/index.sol";
 
 import "forge-std/console.sol";
 
@@ -29,9 +28,32 @@ contract PostDeploy is Script {
         world.setCallbackGasLimit(1);
         ERC721Registration.install(world, "Awei Token", "AWEI");
         world.setMintPrice(0.01 ether);
-        world.setReceiver(deployerAddress);
-        world.mint{value: 0.01 ether}();
+        world.setReceiver(address(0));
 
         vm.stopBroadcast();
+
+        /*// ChainLink tests
+        vm.startBroadcast(deployerPrivateKey);
+        TxHashToChainLinkRequest.set(
+            world,
+            0x47ac8908a0a6715c6b267e40ce13cff455e54bed6b8aeadfc4e73a3aaf56bc63,
+            0x47ac8908a0a6715c6b267e40ce13cff455e54bed6b8aeadfc4e73a3aaf56bc63
+        );
+        ChainLinkRequest.set(
+            world,
+            0x47ac8908a0a6715c6b267e40ce13cff455e54bed6b8aeadfc4e73a3aaf56bc63,
+            0x47ac8908a0a6715c6b267e40ce13cff455e54bed6b8aeadfc4e73a3aaf56bc63,
+            hex"0000000000000000000000004281ecf07378ee595c564a59048801330f3084ee000000000000000000000000326c977e6efc84e512bb9c30f76e30c160ed06fb000000000000000000000000000000000000000000000000000000000000879e",
+            ""
+        );
+        vm.stopBroadcast();
+        vm.startPrank(0x4281eCF07378Ee595C564a59048801330f3084eE);
+        world.mint{value: 0.01 ether}();
+        world.claim(
+            0x47ac8908a0a6715c6b267e40ce13cff455e54bed6b8aeadfc4e73a3aaf56bc63,
+            1
+        );
+        vm.stopPrank();
+        // end chainlink tests */
     }
 }
