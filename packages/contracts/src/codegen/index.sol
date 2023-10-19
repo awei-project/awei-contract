@@ -6,3 +6,7 @@ pragma solidity >=0.8.21;
 import { ChainLinkConfig, ChainLinkConfigData, ChainLinkConfigTableId } from "./tables/ChainLinkConfig.sol";
 import { ChainLinkRequest, ChainLinkRequestData, ChainLinkRequestTableId } from "./tables/ChainLinkRequest.sol";
 import { TxHashToChainLinkRequest, TxHashToChainLinkRequestTableId } from "./tables/TxHashToChainLinkRequest.sol";
+import { AweiTokenMetadata, AweiTokenMetadataData } from "./tables/AweiTokenMetadata.sol";
+import { AweiToken, AweiTokenData } from "./tables/AweiToken.sol";
+import { AweiTokenBalance } from "./tables/AweiTokenBalance.sol";
+import { AweiTokenApproval } from "./tables/AweiTokenApproval.sol";

@@ -39,5 +39,36 @@ export default mudConfig({
         txHash: "bytes32",
       },
     },
+    AweiTokenMetadata: {
+      keySchema: {},
+      valueSchema: {
+        totalSupply: "uint256",
+        proxy: "address",
+        name: "string",
+        symbol: "string",
+      },
+      tableIdArgument: true,
+    },
+    AweiToken: {
+      keySchema: {
+        tokenId: "uint256",
+      },
+      valueSchema: {
+        owner: "address",
+        tokenApproval: "address",
+        uri: "string",
+      },
+      tableIdArgument: true,
+    },
+    AweiTokenBalance: {
+      keySchema: { owner: "address" },
+      valueSchema: "uint256",
+      tableIdArgument: true,
+    },
+    AweiTokenApproval: {
+      keySchema: { owner: "address", spender: "address" },
+      valueSchema: "bool",
+      tableIdArgument: true,
+    },
   },
 });
