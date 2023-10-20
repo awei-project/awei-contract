@@ -3,7 +3,7 @@ import { mudConfig } from "@latticexyz/world/register";
 const ADMINS = [process.env.ADDRESS as string];
 
 export default mudConfig({
-  // excludeSystems: ["ChainLinkFunctionSystem"],
+  excludeSystems: ["ChainLinkFunctionSystem"],
   enums: {
     VoteType: ["ADD", "REMOVE"],
   },

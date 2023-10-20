@@ -50,7 +50,7 @@ contract AxiomSystem is System {
         uint256 gasUsed;
         bytes memory gasUsedBytes = proof.receiptResponses[0].value;
         assembly {
-            gasUsed := mload(add(gasUsed, 0x20))
+            gasUsed := mload(add(gasUsedBytes, 0x20))
         }
 
         uint256 currentScore = AweiTokenScore.getScore(tokenId);

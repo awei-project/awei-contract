@@ -24,3 +24,6 @@ fs_permissions = [{ access = "read", path = "./"}]
 
 [profile.lattice-testnet]
 eth_rpc_url = "https://follower.testnet-chain.linfra.xyz"
+
+[profile.goerli]
+eth_rpc_url = "https://goerli.infura.io/v3/1b4fd85ec53748feae973ece5bc436bd"

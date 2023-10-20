@@ -26,8 +26,8 @@ contract PostDeploy is Script {
         // world.setSource("Hell world");
         world.setSubscriptionId(394);
         world.setCallbackGasLimit(1);
-        ERC721Registration.install(world, "Awei Token", "AWEI");
-        world.setMintPrice(0.01 ether);
+        ERC721Registration.install(world, "Awei Gotchi", "AWEI");
+        world.setMintPrice(0.00001 ether);
         world.setReceiver(deployerAddress);
 
         Config.setEpochStart(
