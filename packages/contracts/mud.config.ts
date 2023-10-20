@@ -4,6 +4,9 @@ const ADMINS = [process.env.ADDRESS as string];
 
 export default mudConfig({
   // excludeSystems: ["ChainLinkFunctionSystem"],
+  enums: {
+    VoteType: ["ADD", "REMOVE"],
+  },
   systems: {
     ChainLinkFunctionSystem: {
       openAccess: true,
@@ -30,6 +33,8 @@ export default mudConfig({
       valueSchema: {
         mintPrice: "uint256",
         receiver: "address",
+        epochStart: "uint256",
+        epochPeriod: "uint256",
       },
     },
     ChainLinkRequest: {
@@ -100,6 +105,16 @@ export default mudConfig({
         key: "address",
       },
       valueSchema: "bool",
+    },
+    Vote: {
+      keySchema: {
+        voter: "address",
+      },
+      valueSchema: {
+        game: "address",
+        epoch: "uint256",
+        voteType: "VoteType",
+      },
     },
   },
 });

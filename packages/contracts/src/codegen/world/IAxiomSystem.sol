@@ -10,5 +10,5 @@ import { IAxiom } from "./../../axiom.sol";
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IAxiomSystem {
-  function claim(bytes calldata txPayload, uint8 v, IAxiom.Proof memory proof, uint256 tokenId) external;
+  function claim(bytes calldata txPayload, uint8 v, IAxiom.Proof calldata proof, uint256 tokenId) external;
 }

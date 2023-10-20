@@ -13,7 +13,7 @@ contract AxiomSystem is System {
     function claim(
         bytes calldata txPayload,
         uint8 v, // v is restricted so we don't need to worry about cheating
-        IAxiom.Proof memory proof,
+        IAxiom.Proof calldata proof,
         uint256 tokenId
     ) external {
         address to = address(uint160(bytes20(txPayload[23:43])));

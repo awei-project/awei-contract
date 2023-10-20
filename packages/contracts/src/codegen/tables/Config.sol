@@ -26,12 +26,14 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant ConfigTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0034020020140000000000000000000000000000000000000000000000000000
+  0x0074040020142020000000000000000000000000000000000000000000000000
 );
 
 struct ConfigData {
   uint256 mintPrice;
   address receiver;
+  uint256 epochStart;
+  uint256 epochPeriod;
 }
 
 library Config {
@@ -58,9 +60,11 @@ library Config {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](2);
+    SchemaType[] memory _valueSchema = new SchemaType[](4);
     _valueSchema[0] = SchemaType.UINT256;
     _valueSchema[1] = SchemaType.ADDRESS;
+    _valueSchema[2] = SchemaType.UINT256;
+    _valueSchema[3] = SchemaType.UINT256;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -78,9 +82,11 @@ library Config {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](2);
+    fieldNames = new string[](4);
     fieldNames[0] = "mintPrice";
     fieldNames[1] = "receiver";
+    fieldNames[2] = "epochStart";
+    fieldNames[3] = "epochPeriod";
   }
 
   /**
@@ -219,6 +225,120 @@ library Config {
   }
 
   /**
+   * @notice Get epochStart.
+   */
+  function getEpochStart() internal view returns (uint256 epochStart) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get epochStart.
+   */
+  function _getEpochStart() internal view returns (uint256 epochStart) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get epochStart (using the specified store).
+   */
+  function getEpochStart(IStore _store) internal view returns (uint256 epochStart) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set epochStart.
+   */
+  function setEpochStart(uint256 epochStart) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((epochStart)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set epochStart.
+   */
+  function _setEpochStart(uint256 epochStart) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((epochStart)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set epochStart (using the specified store).
+   */
+  function setEpochStart(IStore _store, uint256 epochStart) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked((epochStart)), _fieldLayout);
+  }
+
+  /**
+   * @notice Get epochPeriod.
+   */
+  function getEpochPeriod() internal view returns (uint256 epochPeriod) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get epochPeriod.
+   */
+  function _getEpochPeriod() internal view returns (uint256 epochPeriod) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Get epochPeriod (using the specified store).
+   */
+  function getEpochPeriod(IStore _store) internal view returns (uint256 epochPeriod) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (uint256(bytes32(_blob)));
+  }
+
+  /**
+   * @notice Set epochPeriod.
+   */
+  function setEpochPeriod(uint256 epochPeriod) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((epochPeriod)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set epochPeriod.
+   */
+  function _setEpochPeriod(uint256 epochPeriod) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((epochPeriod)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set epochPeriod (using the specified store).
+   */
+  function setEpochPeriod(IStore _store, uint256 epochPeriod) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    _store.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((epochPeriod)), _fieldLayout);
+  }
+
+  /**
    * @notice Get the full data.
    */
   function get() internal view returns (ConfigData memory _table) {
@@ -263,8 +383,8 @@ library Config {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(uint256 mintPrice, address receiver) internal {
-    bytes memory _staticData = encodeStatic(mintPrice, receiver);
+  function set(uint256 mintPrice, address receiver, uint256 epochStart, uint256 epochPeriod) internal {
+    bytes memory _staticData = encodeStatic(mintPrice, receiver, epochStart, epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -277,8 +397,8 @@ library Config {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(uint256 mintPrice, address receiver) internal {
-    bytes memory _staticData = encodeStatic(mintPrice, receiver);
+  function _set(uint256 mintPrice, address receiver, uint256 epochStart, uint256 epochPeriod) internal {
+    bytes memory _staticData = encodeStatic(mintPrice, receiver, epochStart, epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -291,8 +411,8 @@ library Config {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, uint256 mintPrice, address receiver) internal {
-    bytes memory _staticData = encodeStatic(mintPrice, receiver);
+  function set(IStore _store, uint256 mintPrice, address receiver, uint256 epochStart, uint256 epochPeriod) internal {
+    bytes memory _staticData = encodeStatic(mintPrice, receiver, epochStart, epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -306,7 +426,7 @@ library Config {
    * @notice Set the full data using the data struct.
    */
   function set(ConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver);
+    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver, _table.epochStart, _table.epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -320,7 +440,7 @@ library Config {
    * @notice Set the full data using the data struct.
    */
   function _set(ConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver);
+    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver, _table.epochStart, _table.epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -334,7 +454,7 @@ library Config {
    * @notice Set the full data using the data struct (using the specified store).
    */
   function set(IStore _store, ConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver);
+    bytes memory _staticData = encodeStatic(_table.mintPrice, _table.receiver, _table.epochStart, _table.epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -347,10 +467,16 @@ library Config {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (uint256 mintPrice, address receiver) {
+  function decodeStatic(
+    bytes memory _blob
+  ) internal pure returns (uint256 mintPrice, address receiver, uint256 epochStart, uint256 epochPeriod) {
     mintPrice = (uint256(Bytes.slice32(_blob, 0)));
 
     receiver = (address(Bytes.slice20(_blob, 32)));
+
+    epochStart = (uint256(Bytes.slice32(_blob, 52)));
+
+    epochPeriod = (uint256(Bytes.slice32(_blob, 84)));
   }
 
   /**
@@ -364,7 +490,7 @@ library Config {
     PackedCounter,
     bytes memory
   ) internal pure returns (ConfigData memory _table) {
-    (_table.mintPrice, _table.receiver) = decodeStatic(_staticData);
+    (_table.mintPrice, _table.receiver, _table.epochStart, _table.epochPeriod) = decodeStatic(_staticData);
   }
 
   /**
@@ -398,8 +524,13 @@ library Config {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(uint256 mintPrice, address receiver) internal pure returns (bytes memory) {
-    return abi.encodePacked(mintPrice, receiver);
+  function encodeStatic(
+    uint256 mintPrice,
+    address receiver,
+    uint256 epochStart,
+    uint256 epochPeriod
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(mintPrice, receiver, epochStart, epochPeriod);
   }
 
   /**
@@ -410,9 +541,11 @@ library Config {
    */
   function encode(
     uint256 mintPrice,
-    address receiver
+    address receiver,
+    uint256 epochStart,
+    uint256 epochPeriod
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(mintPrice, receiver);
+    bytes memory _staticData = encodeStatic(mintPrice, receiver, epochStart, epochPeriod);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

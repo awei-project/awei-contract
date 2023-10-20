@@ -8,7 +8,7 @@ import {ResourceId, ResourceIdLib} from "@latticexyz/store/src/ResourceId.sol";
 import {WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE} from "@latticexyz/store/src/storeResourceTypes.sol";
 import {ERC721Registration} from "../src/aweiToken/ERC721Registration.sol";
-import {TxHashToChainLinkRequest, ChainLinkRequest} from "../src/codegen/index.sol";
+import {TxHashToChainLinkRequest, ChainLinkRequest, Config} from "../src/codegen/index.sol";
 
 import "forge-std/console.sol";
 
@@ -29,6 +29,12 @@ contract PostDeploy is Script {
         ERC721Registration.install(world, "Awei Token", "AWEI");
         world.setMintPrice(0.01 ether);
         world.setReceiver(deployerAddress);
+
+        Config.setEpochStart(
+            world,
+            block.timestamp - (block.timestamp % (1 weeks))
+        );
+        Config.setEpochPeriod(world, 1 weeks);
 
         vm.stopBroadcast();
 
