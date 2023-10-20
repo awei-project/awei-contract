@@ -28,7 +28,7 @@ contract PostDeploy is Script {
         world.setCallbackGasLimit(1);
         ERC721Registration.install(world, "Awei Token", "AWEI");
         world.setMintPrice(0.01 ether);
-        world.setReceiver(address(0));
+        world.setReceiver(deployerAddress);
 
         vm.stopBroadcast();
 

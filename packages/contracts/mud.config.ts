@@ -95,5 +95,11 @@ export default mudConfig({
       },
       valueSchema: "bool",
     },
+    Game: {
+      keySchema: {
+        key: "address",
+      },
+      valueSchema: "bool",
+    },
   },
 });

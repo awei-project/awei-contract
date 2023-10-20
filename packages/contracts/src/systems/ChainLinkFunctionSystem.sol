@@ -4,7 +4,7 @@ pragma solidity >=0.8.21;
 import {System} from "@latticexyz/world/src/System.sol";
 import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
 import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
-import {ChainLinkRequest, TxHashToChainLinkRequest, ChainLinkConfig, AweiTokenScore, ClaimRecord} from "../codegen/index.sol";
+import {ChainLinkRequest, TxHashToChainLinkRequest, ChainLinkConfig, AweiTokenScore, ClaimRecord, Game} from "../codegen/index.sol";
 import {LibERC721} from "../aweiToken/LibERC721.sol";
 
 // Suppose to be changed when deploying
@@ -17,6 +17,39 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
     event Response(bytes32 indexed requestId, bytes response, bytes err);
 
     constructor() FunctionsClient(ChainLinkFunctionRouter) {}
+
+    function claim(bytes32 txHash, uint256 tokenId) external {
+        require(
+            !ClaimRecord.get(txHash),
+            "ChainLinkFunctionSystem: claim twice"
+        );
+        bytes memory response = ChainLinkRequest.getResponse(
+            TxHashToChainLinkRequest.get(txHash)
+        );
+        require(
+            response.length != 0,
+            "ChainLinkFunctionSystem: request is not fulfilled"
+        );
+
+        // decode layout: address<from>,address<to>,uint256<gasUsed>
+        (address from, address to, uint256 gasUsed) = abi.decode(
+            response,
+            (address, address, uint256)
+        );
+        require(
+            from == _msgSender(),
+            "ChainLinkFunctionSystem: not from sender"
+        );
+        require(
+            LibERC721.ownerOf(tokenId) == _msgSender(),
+            "ChainLinkFunctionSystem: can't claim others"
+        );
+        require(Game.get(to), "ChainLinkFunctionSystem: not a allowed game");
+
+        uint256 currentScore = AweiTokenScore.getScore(tokenId);
+        ClaimRecord.set(txHash, true);
+        AweiTokenScore.setScore(tokenId, currentScore + gasUsed);
+    }
 
     // TODO: We need some way for people to pay for fee when sending request.
     //       For now, we assume there is no abusement.
@@ -49,38 +82,6 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
 
         ChainLinkRequest.set(requestId, txHash, "", "");
         TxHashToChainLinkRequest.set(txHash, requestId);
-    }
-
-    function claim(bytes32 txHash, uint256 tokenId) external {
-        require(
-            !ClaimRecord.get(txHash),
-            "ChainLinkFunctionSystem: claim twice"
-        );
-        bytes memory response = ChainLinkRequest.getResponse(
-            TxHashToChainLinkRequest.get(txHash)
-        );
-        require(
-            response.length != 0,
-            "ChainLinkFunctionSystem: request is not fulfilled"
-        );
-
-        // decode layout: address<from>,address<to>,uint256<gasUsed>
-        (address from, address to, uint256 gasUsed) = abi.decode(
-            response,
-            (address, address, uint256)
-        );
-        require(
-            from == _msgSender(),
-            "ChainLinkFunctionSystem: not from sender"
-        );
-        require(
-            LibERC721.ownerOf(tokenId) == _msgSender(),
-            "ChainLinkFunctionSystem: can't claim others"
-        );
-
-        uint256 currentScore = AweiTokenScore.getScore(tokenId);
-        ClaimRecord.set(txHash, true);
-        AweiTokenScore.setScore(tokenId, currentScore + gasUsed);
     }
 
     function fulfillRequest(

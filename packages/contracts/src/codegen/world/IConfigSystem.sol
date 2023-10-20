@@ -17,4 +17,6 @@ interface IConfigSystem {
   function setMintPrice(uint256 _price) external;
 
   function setReceiver(address _receiver) external;
+
+  function setGame(address _game, bool _allowed) external;
 }

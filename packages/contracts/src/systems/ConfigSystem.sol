@@ -2,7 +2,7 @@
 pragma solidity >=0.8.21;
 
 import {System} from "@latticexyz/world/src/System.sol";
-import {Config, ChainLinkConfig} from "../codegen/index.sol";
+import {Config, ChainLinkConfig, Game} from "../codegen/index.sol";
 
 contract ConfigSystem is System {
     function setSource(string memory _source) external {
@@ -23,5 +23,9 @@ contract ConfigSystem is System {
 
     function setReceiver(address _receiver) external {
         Config.setReceiver(_receiver);
+    }
+
+    function setGame(address _game, bool _allowed) external {
+        Game.set(_game, _allowed);
     }
 }

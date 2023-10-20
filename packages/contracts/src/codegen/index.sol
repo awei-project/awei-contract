@@ -13,3 +13,4 @@ import { AweiTokenBalance } from "./tables/AweiTokenBalance.sol";
 import { AweiTokenApproval } from "./tables/AweiTokenApproval.sol";
 import { AweiTokenScore, AweiTokenScoreTableId } from "./tables/AweiTokenScore.sol";
 import { ClaimRecord, ClaimRecordTableId } from "./tables/ClaimRecord.sol";
+import { Game, GameTableId } from "./tables/Game.sol";
