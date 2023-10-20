@@ -9,11 +9,13 @@ import {WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol
 import {RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE} from "@latticexyz/store/src/storeResourceTypes.sol";
 import {ERC721Registration} from "../src/aweiToken/ERC721Registration.sol";
 import {TxHashToChainLinkRequest, ChainLinkRequest, Config} from "../src/codegen/index.sol";
+import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import "forge-std/console.sol";
 
 contract PostDeploy is Script {
     function run(address worldAddress) external {
+        StoreSwitch.setStoreAddress(worldAddress);
         // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployerAddress = vm.envAddress("ADDRESS");
@@ -30,11 +32,8 @@ contract PostDeploy is Script {
         world.setMintPrice(0.00001 ether);
         world.setReceiver(deployerAddress);
 
-        Config.setEpochStart(
-            world,
-            block.timestamp - (block.timestamp % (1 weeks))
-        );
-        Config.setEpochPeriod(world, 1 weeks);
+        Config.setEpochStart(block.timestamp - (block.timestamp % (1 weeks)));
+        Config.setEpochPeriod(1 weeks);
 
         vm.stopBroadcast();
 

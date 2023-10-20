@@ -93,13 +93,6 @@ library TxHashToChainLinkRequest {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get requestId.
    */
   function getRequestId(bytes32 txHash) internal view returns (bytes32 requestId) {
@@ -118,17 +111,6 @@ library TxHashToChainLinkRequest {
     _keyTuple[0] = txHash;
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (bytes32(_blob));
-  }
-
-  /**
-   * @notice Get requestId (using the specified store).
-   */
-  function getRequestId(IStore _store, bytes32 txHash) internal view returns (bytes32 requestId) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = txHash;
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (bytes32(_blob));
   }
 
@@ -155,17 +137,6 @@ library TxHashToChainLinkRequest {
   }
 
   /**
-   * @notice Get requestId (using the specified store).
-   */
-  function get(IStore _store, bytes32 txHash) internal view returns (bytes32 requestId) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = txHash;
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (bytes32(_blob));
-  }
-
-  /**
    * @notice Set requestId.
    */
   function setRequestId(bytes32 txHash, bytes32 requestId) internal {
@@ -183,16 +154,6 @@ library TxHashToChainLinkRequest {
     _keyTuple[0] = txHash;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((requestId)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set requestId (using the specified store).
-   */
-  function setRequestId(IStore _store, bytes32 txHash, bytes32 requestId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = txHash;
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((requestId)), _fieldLayout);
   }
 
   /**
@@ -216,16 +177,6 @@ library TxHashToChainLinkRequest {
   }
 
   /**
-   * @notice Set requestId (using the specified store).
-   */
-  function set(IStore _store, bytes32 txHash, bytes32 requestId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = txHash;
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((requestId)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(bytes32 txHash) internal {
@@ -243,16 +194,6 @@ library TxHashToChainLinkRequest {
     _keyTuple[0] = txHash;
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, bytes32 txHash) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = txHash;
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

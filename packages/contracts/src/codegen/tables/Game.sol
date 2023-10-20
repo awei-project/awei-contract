@@ -91,13 +91,6 @@ library Game {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get value.
    */
   function getValue(address key) internal view returns (bool value) {
@@ -116,17 +109,6 @@ library Game {
     _keyTuple[0] = bytes32(uint256(uint160(key)));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
-   * @notice Get value (using the specified store).
-   */
-  function getValue(IStore _store, address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(key)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
   }
 
@@ -153,17 +135,6 @@ library Game {
   }
 
   /**
-   * @notice Get value (using the specified store).
-   */
-  function get(IStore _store, address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(key)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (_toBool(uint8(bytes1(_blob))));
-  }
-
-  /**
    * @notice Set value.
    */
   function setValue(address key, bool value) internal {
@@ -181,16 +152,6 @@ library Game {
     _keyTuple[0] = bytes32(uint256(uint160(key)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set value (using the specified store).
-   */
-  function setValue(IStore _store, address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(key)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
   }
 
   /**
@@ -214,16 +175,6 @@ library Game {
   }
 
   /**
-   * @notice Set value (using the specified store).
-   */
-  function set(IStore _store, address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(key)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(address key) internal {
@@ -241,16 +192,6 @@ library Game {
     _keyTuple[0] = bytes32(uint256(uint160(key)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, address key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(key)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

@@ -64,6 +64,7 @@ export default mudConfig({
         symbol: "string",
       },
       tableIdArgument: true,
+      storeArgument: true,
     },
     AweiToken: {
       keySchema: {
@@ -75,16 +76,19 @@ export default mudConfig({
         uri: "string",
       },
       tableIdArgument: true,
+      storeArgument: true,
     },
     AweiTokenBalance: {
       keySchema: { owner: "address" },
       valueSchema: "uint256",
       tableIdArgument: true,
+      storeArgument: true,
     },
     AweiTokenApproval: {
       keySchema: { owner: "address", spender: "address" },
       valueSchema: "bool",
       tableIdArgument: true,
+      storeArgument: true,
     },
     AweiTokenScore: {
       keySchema: {

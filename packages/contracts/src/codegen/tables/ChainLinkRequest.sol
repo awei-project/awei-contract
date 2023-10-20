@@ -103,13 +103,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get txHash.
    */
   function getTxHash(bytes32 requestId) internal view returns (bytes32 txHash) {
@@ -132,17 +125,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Get txHash (using the specified store).
-   */
-  function getTxHash(IStore _store, bytes32 requestId) internal view returns (bytes32 txHash) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (bytes32(_blob));
-  }
-
-  /**
    * @notice Set txHash.
    */
   function setTxHash(bytes32 requestId, bytes32 txHash) internal {
@@ -160,16 +142,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((txHash)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set txHash (using the specified store).
-   */
-  function setTxHash(IStore _store, bytes32 requestId, bytes32 txHash) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((txHash)), _fieldLayout);
   }
 
   /**
@@ -195,17 +167,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Get response (using the specified store).
-   */
-  function getResponse(IStore _store, bytes32 requestId) internal view returns (bytes memory response) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
-  }
-
-  /**
    * @notice Set response.
    */
   function setResponse(bytes32 requestId, bytes memory response) internal {
@@ -223,16 +184,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((response)));
-  }
-
-  /**
-   * @notice Set response (using the specified store).
-   */
-  function setResponse(IStore _store, bytes32 requestId, bytes memory response) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((response)));
   }
 
   /**
@@ -256,19 +207,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 1;
-    }
-  }
-
-  /**
-   * @notice Get the length of response (using the specified store).
-   */
-  function lengthResponse(IStore _store, bytes32 requestId) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
       return _byteLength / 1;
     }
@@ -303,20 +241,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Get an item of response (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemResponse(IStore _store, bytes32 requestId, uint256 _index) internal view returns (bytes memory) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
-    }
-  }
-
-  /**
    * @notice Push a slice to response.
    */
   function pushResponse(bytes32 requestId, bytes memory _slice) internal {
@@ -337,16 +261,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Push a slice to response (using the specified store).
-   */
-  function pushResponse(IStore _store, bytes32 requestId, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
-  }
-
-  /**
    * @notice Pop a slice from response.
    */
   function popResponse(bytes32 requestId) internal {
@@ -364,16 +278,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
-  }
-
-  /**
-   * @notice Pop a slice from response (using the specified store).
-   */
-  function popResponse(IStore _store, bytes32 requestId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
@@ -403,19 +307,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Update a slice of response (using the specified store) at `_index`.
-   */
-  function updateResponse(IStore _store, bytes32 requestId, uint256 _index, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    unchecked {
-      bytes memory _encoded = bytes((_slice));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 1), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Get error.
    */
   function getError(bytes32 requestId) internal view returns (bytes memory error) {
@@ -434,17 +325,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 1);
-    return (bytes(_blob));
-  }
-
-  /**
-   * @notice Get error (using the specified store).
-   */
-  function getError(IStore _store, bytes32 requestId) internal view returns (bytes memory error) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 1);
     return (bytes(_blob));
   }
 
@@ -469,16 +349,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Set error (using the specified store).
-   */
-  function setError(IStore _store, bytes32 requestId, bytes memory error) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.setDynamicField(_tableId, _keyTuple, 1, bytes((error)));
-  }
-
-  /**
    * @notice Get the length of error.
    */
   function lengthError(bytes32 requestId) internal view returns (uint256) {
@@ -499,19 +369,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 1);
-    unchecked {
-      return _byteLength / 1;
-    }
-  }
-
-  /**
-   * @notice Get the length of error (using the specified store).
-   */
-  function lengthError(IStore _store, bytes32 requestId) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 1);
     unchecked {
       return _byteLength / 1;
     }
@@ -546,20 +403,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Get an item of error (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemError(IStore _store, bytes32 requestId, uint256 _index) internal view returns (bytes memory) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 1, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
-    }
-  }
-
-  /**
    * @notice Push a slice to error.
    */
   function pushError(bytes32 requestId, bytes memory _slice) internal {
@@ -580,16 +423,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Push a slice to error (using the specified store).
-   */
-  function pushError(IStore _store, bytes32 requestId, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 1, bytes((_slice)));
-  }
-
-  /**
    * @notice Pop a slice from error.
    */
   function popError(bytes32 requestId) internal {
@@ -607,16 +440,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 1, 1);
-  }
-
-  /**
-   * @notice Pop a slice from error (using the specified store).
-   */
-  function popError(IStore _store, bytes32 requestId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 1, 1);
   }
 
   /**
@@ -646,19 +469,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Update a slice of error (using the specified store) at `_index`.
-   */
-  function updateError(IStore _store, bytes32 requestId, uint256 _index, bytes memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    unchecked {
-      bytes memory _encoded = bytes((_slice));
-      _store.spliceDynamicData(_tableId, _keyTuple, 1, uint40(_index * 1), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Get the full data.
    */
   function get(bytes32 requestId) internal view returns (ChainLinkRequestData memory _table) {
@@ -681,21 +491,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(IStore _store, bytes32 requestId) internal view returns (ChainLinkRequestData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -734,21 +529,6 @@ library ChainLinkRequest {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(IStore _store, bytes32 requestId, bytes32 txHash, bytes memory response, bytes memory error) internal {
-    bytes memory _staticData = encodeStatic(txHash);
-
-    PackedCounter _encodedLengths = encodeLengths(response, error);
-    bytes memory _dynamicData = encodeDynamic(response, error);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(bytes32 requestId, ChainLinkRequestData memory _table) internal {
@@ -776,21 +556,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, bytes32 requestId, ChainLinkRequestData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.txHash);
-
-    PackedCounter _encodedLengths = encodeLengths(_table.response, _table.error);
-    bytes memory _dynamicData = encodeDynamic(_table.response, _table.error);
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -855,16 +620,6 @@ library ChainLinkRequest {
     _keyTuple[0] = requestId;
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, bytes32 requestId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = requestId;
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

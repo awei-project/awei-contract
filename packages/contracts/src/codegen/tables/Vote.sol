@@ -104,13 +104,6 @@ library Vote {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get game.
    */
   function getGame(address voter) internal view returns (address game) {
@@ -133,17 +126,6 @@ library Vote {
   }
 
   /**
-   * @notice Get game (using the specified store).
-   */
-  function getGame(IStore _store, address voter) internal view returns (address game) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (address(bytes20(_blob)));
-  }
-
-  /**
    * @notice Set game.
    */
   function setGame(address voter, address game) internal {
@@ -161,16 +143,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((game)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set game (using the specified store).
-   */
-  function setGame(IStore _store, address voter, address game) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((game)), _fieldLayout);
   }
 
   /**
@@ -196,17 +168,6 @@ library Vote {
   }
 
   /**
-   * @notice Get epoch (using the specified store).
-   */
-  function getEpoch(IStore _store, address voter) internal view returns (uint256 epoch) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set epoch.
    */
   function setEpoch(address voter, uint256 epoch) internal {
@@ -224,16 +185,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((epoch)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set epoch (using the specified store).
-   */
-  function setEpoch(IStore _store, address voter, uint256 epoch) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((epoch)), _fieldLayout);
   }
 
   /**
@@ -259,17 +210,6 @@ library Vote {
   }
 
   /**
-   * @notice Get voteType (using the specified store).
-   */
-  function getVoteType(IStore _store, address voter) internal view returns (VoteType voteType) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 2, _fieldLayout);
-    return VoteType(uint8(bytes1(_blob)));
-  }
-
-  /**
    * @notice Set voteType.
    */
   function setVoteType(address voter, VoteType voteType) internal {
@@ -287,16 +227,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked(uint8(voteType)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set voteType (using the specified store).
-   */
-  function setVoteType(IStore _store, address voter, VoteType voteType) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.setStaticField(_tableId, _keyTuple, 2, abi.encodePacked(uint8(voteType)), _fieldLayout);
   }
 
   /**
@@ -322,21 +252,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(IStore _store, address voter) internal view returns (VoteData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -375,21 +290,6 @@ library Vote {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(IStore _store, address voter, address game, uint256 epoch, VoteType voteType) internal {
-    bytes memory _staticData = encodeStatic(game, epoch, voteType);
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(address voter, VoteData memory _table) internal {
@@ -417,21 +317,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, address voter, VoteData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.game, _table.epoch, _table.voteType);
-
-    PackedCounter _encodedLengths;
-    bytes memory _dynamicData;
-
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -477,16 +362,6 @@ library Vote {
     _keyTuple[0] = bytes32(uint256(uint160(voter)));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, address voter) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160(voter)));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

@@ -93,13 +93,6 @@ library AweiTokenScore {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get score.
    */
   function getScore(uint256 tokenId) internal view returns (uint256 score) {
@@ -118,17 +111,6 @@ library AweiTokenScore {
     _keyTuple[0] = bytes32(uint256(tokenId));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
-   * @notice Get score (using the specified store).
-   */
-  function getScore(IStore _store, uint256 tokenId) internal view returns (uint256 score) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(tokenId));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (uint256(bytes32(_blob)));
   }
 
@@ -155,17 +137,6 @@ library AweiTokenScore {
   }
 
   /**
-   * @notice Get score (using the specified store).
-   */
-  function get(IStore _store, uint256 tokenId) internal view returns (uint256 score) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(tokenId));
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint256(bytes32(_blob)));
-  }
-
-  /**
    * @notice Set score.
    */
   function setScore(uint256 tokenId, uint256 score) internal {
@@ -183,16 +154,6 @@ library AweiTokenScore {
     _keyTuple[0] = bytes32(uint256(tokenId));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((score)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set score (using the specified store).
-   */
-  function setScore(IStore _store, uint256 tokenId, uint256 score) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(tokenId));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((score)), _fieldLayout);
   }
 
   /**
@@ -216,16 +177,6 @@ library AweiTokenScore {
   }
 
   /**
-   * @notice Set score (using the specified store).
-   */
-  function set(IStore _store, uint256 tokenId, uint256 score) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(tokenId));
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((score)), _fieldLayout);
-  }
-
-  /**
    * @notice Delete all data for given keys.
    */
   function deleteRecord(uint256 tokenId) internal {
@@ -243,16 +194,6 @@ library AweiTokenScore {
     _keyTuple[0] = bytes32(uint256(tokenId));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store, uint256 tokenId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(tokenId));
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**

@@ -101,13 +101,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Register the table with its config (using the specified store).
-   */
-  function register(IStore _store) internal {
-    _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
-  }
-
-  /**
    * @notice Get subscriptionId.
    */
   function getSubscriptionId() internal view returns (uint64 subscriptionId) {
@@ -128,16 +121,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get subscriptionId (using the specified store).
-   */
-  function getSubscriptionId(IStore _store) internal view returns (uint64 subscriptionId) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (uint64(bytes8(_blob)));
-  }
-
-  /**
    * @notice Set subscriptionId.
    */
   function setSubscriptionId(uint64 subscriptionId) internal {
@@ -153,15 +136,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((subscriptionId)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set subscriptionId (using the specified store).
-   */
-  function setSubscriptionId(IStore _store, uint64 subscriptionId) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((subscriptionId)), _fieldLayout);
   }
 
   /**
@@ -185,16 +159,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get callbackGasLimit (using the specified store).
-   */
-  function getCallbackGasLimit(IStore _store) internal view returns (uint32 callbackGasLimit) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
-    return (uint32(bytes4(_blob)));
-  }
-
-  /**
    * @notice Set callbackGasLimit.
    */
   function setCallbackGasLimit(uint32 callbackGasLimit) internal {
@@ -210,15 +174,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((callbackGasLimit)), _fieldLayout);
-  }
-
-  /**
-   * @notice Set callbackGasLimit (using the specified store).
-   */
-  function setCallbackGasLimit(IStore _store, uint32 callbackGasLimit) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((callbackGasLimit)), _fieldLayout);
   }
 
   /**
@@ -242,16 +197,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get source (using the specified store).
-   */
-  function getSource(IStore _store) internal view returns (string memory source) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (string(_blob));
-  }
-
-  /**
    * @notice Set source.
    */
   function setSource(string memory source) internal {
@@ -267,15 +212,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((source)));
-  }
-
-  /**
-   * @notice Set source (using the specified store).
-   */
-  function setSource(IStore _store, string memory source) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((source)));
   }
 
   /**
@@ -297,18 +233,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
-    unchecked {
-      return _byteLength / 1;
-    }
-  }
-
-  /**
-   * @notice Get the length of source (using the specified store).
-   */
-  function lengthSource(IStore _store) internal view returns (uint256) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    uint256 _byteLength = _store.getDynamicFieldLength(_tableId, _keyTuple, 0);
     unchecked {
       return _byteLength / 1;
     }
@@ -341,19 +265,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get an item of source (using the specified store).
-   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
-   */
-  function getItemSource(IStore _store, uint256 _index) internal view returns (string memory) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    unchecked {
-      bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (string(_blob));
-    }
-  }
-
-  /**
    * @notice Push a slice to source.
    */
   function pushSource(string memory _slice) internal {
@@ -372,15 +283,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Push a slice to source (using the specified store).
-   */
-  function pushSource(IStore _store, string memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
-  }
-
-  /**
    * @notice Pop a slice from source.
    */
   function popSource() internal {
@@ -396,15 +298,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
-  }
-
-  /**
-   * @notice Pop a slice from source (using the specified store).
-   */
-  function popSource(IStore _store) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
@@ -432,18 +325,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Update a slice of source (using the specified store) at `_index`.
-   */
-  function updateSource(IStore _store, uint256 _index, string memory _slice) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    unchecked {
-      bytes memory _encoded = bytes((_slice));
-      _store.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 1), uint40(_encoded.length), _encoded);
-    }
-  }
-
-  /**
    * @notice Get the full data.
    */
   function get() internal view returns (ChainLinkConfigData memory _table) {
@@ -464,20 +345,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = StoreCore.getRecord(
-      _tableId,
-      _keyTuple,
-      _fieldLayout
-    );
-    return decode(_staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
-   * @notice Get the full data (using the specified store).
-   */
-  function get(IStore _store) internal view returns (ChainLinkConfigData memory _table) {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    (bytes memory _staticData, PackedCounter _encodedLengths, bytes memory _dynamicData) = _store.getRecord(
       _tableId,
       _keyTuple,
       _fieldLayout
@@ -514,20 +381,6 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Set the full data using individual values (using the specified store).
-   */
-  function set(IStore _store, uint64 subscriptionId, uint32 callbackGasLimit, string memory source) internal {
-    bytes memory _staticData = encodeStatic(subscriptionId, callbackGasLimit);
-
-    PackedCounter _encodedLengths = encodeLengths(source);
-    bytes memory _dynamicData = encodeDynamic(source);
-
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
-  }
-
-  /**
    * @notice Set the full data using the data struct.
    */
   function set(ChainLinkConfigData memory _table) internal {
@@ -553,20 +406,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData, _fieldLayout);
-  }
-
-  /**
-   * @notice Set the full data using the data struct (using the specified store).
-   */
-  function set(IStore _store, ChainLinkConfigData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.subscriptionId, _table.callbackGasLimit);
-
-    PackedCounter _encodedLengths = encodeLengths(_table.source);
-    bytes memory _dynamicData = encodeDynamic(_table.source);
-
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.setRecord(_tableId, _keyTuple, _staticData, _encodedLengths, _dynamicData);
   }
 
   /**
@@ -625,15 +464,6 @@ library ChainLinkConfig {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
-  }
-
-  /**
-   * @notice Delete all data for given keys (using the specified store).
-   */
-  function deleteRecord(IStore _store) internal {
-    bytes32[] memory _keyTuple = new bytes32[](0);
-
-    _store.deleteRecord(_tableId, _keyTuple);
   }
 
   /**
