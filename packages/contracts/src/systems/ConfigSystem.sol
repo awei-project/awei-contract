@@ -5,10 +5,6 @@ import {System} from "@latticexyz/world/src/System.sol";
 import {Config, ChainLinkConfig, Game} from "../codegen/index.sol";
 
 contract ConfigSystem is System {
-    function setSource(string memory _source) external {
-        ChainLinkConfig.setSource(_source);
-    }
-
     function setSubscriptionId(uint64 _subscriptionId) external {
         ChainLinkConfig.setSubscriptionId(_subscriptionId);
     }
@@ -25,7 +21,7 @@ contract ConfigSystem is System {
         Config.setReceiver(_receiver);
     }
 
-    function setGame(address _game, bool _allowed) external {
-        Game.set(_game, _allowed);
+    function setGame(address _game, uint256 _chainId, bool _allowed) external {
+        Game.set(_game, _chainId, _allowed);
     }
 }

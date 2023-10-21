@@ -14,6 +14,12 @@ bytes32 constant jobId = "fun-polygon-mumbai-1";
 contract ChainLinkFunctionSystem is System, FunctionsClient {
     using FunctionsRequest for FunctionsRequest.Request;
 
+    enum Chain {
+        Polygon,
+        Optimism,
+        Scroll
+    }
+
     event Response(bytes32 indexed requestId, bytes response, bytes err);
 
     constructor() FunctionsClient(ChainLinkFunctionRouter) {}
@@ -32,9 +38,9 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
         );
 
         // decode layout: address<from>,address<to>,uint256<gasUsed>
-        (address from, address to, uint256 gasUsed) = abi.decode(
+        (address from, address to, uint256 gasUsed, uint256 chainId) = abi.decode(
             response,
-            (address, address, uint256)
+            (address, address, uint256, uint256)
         );
         require(
             from == _msgSender(),
@@ -44,7 +50,7 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
             LibERC721.ownerOf(tokenId) == _msgSender(),
             "ChainLinkFunctionSystem: can't claim others"
         );
-        require(Game.get(to), "ChainLinkFunctionSystem: not a allowed game");
+        require(Game.get(to, chainId), "ChainLinkFunctionSystem: not a allowed game");
 
         uint256 currentScore = AweiTokenScore.getScore(tokenId);
         ClaimRecord.set(txHash, true);
@@ -53,7 +59,7 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
 
     // TODO: We need some way for people to pay for fee when sending request.
     //       For now, we assume there is no abusement.
-    function sendRequest(bytes32 txHash) external {
+    function sendRequest(bytes32 txHash, Chain chain) external {
         FunctionsRequest.Request memory req;
         string[] memory args = new string[](1);
 
@@ -70,7 +76,15 @@ contract ChainLinkFunctionSystem is System, FunctionsClient {
         }
         args[0] = string(txHashString);
 
-        req.initializeRequestForInlineJavaScript(ChainLinkConfig.getSource());
+        if (chain == Chain.Polygon) {
+            req.initializeRequestForInlineJavaScript(ChainLinkConfig.getPolygonSource());
+        } else if (chain == Chain.Optimism) {
+            req.initializeRequestForInlineJavaScript(ChainLinkConfig.getOptimismSource());
+        } else if (chain == Chain.Scroll) {
+            req.initializeRequestForInlineJavaScript(ChainLinkConfig.getScrollSource());
+        } else {
+            revert("ChainLinkFunctionSystem: invalid chain");
+        }
         req.setArgs(args);
 
         bytes32 requestId = _sendRequest(

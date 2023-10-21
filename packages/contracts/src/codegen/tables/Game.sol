@@ -41,8 +41,9 @@ library Game {
    * @return _keySchema The key schema for the table.
    */
   function getKeySchema() internal pure returns (Schema) {
-    SchemaType[] memory _keySchema = new SchemaType[](1);
+    SchemaType[] memory _keySchema = new SchemaType[](2);
     _keySchema[0] = SchemaType.ADDRESS;
+    _keySchema[1] = SchemaType.UINT256;
 
     return SchemaLib.encode(_keySchema);
   }
@@ -63,8 +64,9 @@ library Game {
    * @return keyNames An array of strings with the names of key fields.
    */
   function getKeyNames() internal pure returns (string[] memory keyNames) {
-    keyNames = new string[](1);
+    keyNames = new string[](2);
     keyNames[0] = "key";
+    keyNames[1] = "chainId";
   }
 
   /**
@@ -93,9 +95,10 @@ library Game {
   /**
    * @notice Get value.
    */
-  function getValue(address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function getValue(address key, uint256 chainId) internal view returns (bool value) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
@@ -104,9 +107,10 @@ library Game {
   /**
    * @notice Get value.
    */
-  function _getValue(address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function _getValue(address key, uint256 chainId) internal view returns (bool value) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
@@ -115,9 +119,10 @@ library Game {
   /**
    * @notice Get value.
    */
-  function get(address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function get(address key, uint256 chainId) internal view returns (bool value) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
@@ -126,9 +131,10 @@ library Game {
   /**
    * @notice Get value.
    */
-  function _get(address key) internal view returns (bool value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function _get(address key, uint256 chainId) internal view returns (bool value) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
     return (_toBool(uint8(bytes1(_blob))));
@@ -137,9 +143,10 @@ library Game {
   /**
    * @notice Set value.
    */
-  function setValue(address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function setValue(address key, uint256 chainId, bool value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
   }
@@ -147,9 +154,10 @@ library Game {
   /**
    * @notice Set value.
    */
-  function _setValue(address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function _setValue(address key, uint256 chainId, bool value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
   }
@@ -157,9 +165,10 @@ library Game {
   /**
    * @notice Set value.
    */
-  function set(address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function set(address key, uint256 chainId, bool value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
   }
@@ -167,9 +176,10 @@ library Game {
   /**
    * @notice Set value.
    */
-  function _set(address key, bool value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function _set(address key, uint256 chainId, bool value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((value)), _fieldLayout);
   }
@@ -177,9 +187,10 @@ library Game {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(address key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function deleteRecord(address key, uint256 chainId) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreSwitch.deleteRecord(_tableId, _keyTuple);
   }
@@ -187,9 +198,10 @@ library Game {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(address key) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function _deleteRecord(address key, uint256 chainId) internal {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     StoreCore.deleteRecord(_tableId, _keyTuple, _fieldLayout);
   }
@@ -220,9 +232,10 @@ library Game {
   /**
    * @notice Encode keys as a bytes32 array using this table's field layout.
    */
-  function encodeKeyTuple(address key) internal pure returns (bytes32[] memory) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
+  function encodeKeyTuple(address key, uint256 chainId) internal pure returns (bytes32[] memory) {
+    bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(key)));
+    _keyTuple[1] = bytes32(uint256(chainId));
 
     return _keyTuple;
   }

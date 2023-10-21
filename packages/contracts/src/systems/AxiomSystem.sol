@@ -17,7 +17,7 @@ contract AxiomSystem is System {
         uint256 tokenId
     ) external {
         address to = address(uint160(bytes20(txPayload[23:43])));
-        require(Game.get(to), "AxiomSystem: not a allowed game");
+        require(Game.get(to, block.chainid), "AxiomSystem: not a allowed game");
 
         bytes32 txHash = keccak256(txPayload);
         require(!ClaimRecord.get(txHash), "AxiomSystem: claim twice");

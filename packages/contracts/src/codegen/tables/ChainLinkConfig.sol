@@ -26,13 +26,15 @@ ResourceId constant _tableId = ResourceId.wrap(
 ResourceId constant ChainLinkConfigTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x000c020108040000000000000000000000000000000000000000000000000000
+  0x000c020308040000000000000000000000000000000000000000000000000000
 );
 
 struct ChainLinkConfigData {
   uint64 subscriptionId;
   uint32 callbackGasLimit;
-  string source;
+  string polygonSource;
+  string optimismSource;
+  string scrollSource;
 }
 
 library ChainLinkConfig {
@@ -59,10 +61,12 @@ library ChainLinkConfig {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](3);
+    SchemaType[] memory _valueSchema = new SchemaType[](5);
     _valueSchema[0] = SchemaType.UINT64;
     _valueSchema[1] = SchemaType.UINT32;
     _valueSchema[2] = SchemaType.STRING;
+    _valueSchema[3] = SchemaType.STRING;
+    _valueSchema[4] = SchemaType.STRING;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -80,10 +84,12 @@ library ChainLinkConfig {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](3);
+    fieldNames = new string[](5);
     fieldNames[0] = "subscriptionId";
     fieldNames[1] = "callbackGasLimit";
-    fieldNames[2] = "source";
+    fieldNames[2] = "polygonSource";
+    fieldNames[3] = "optimismSource";
+    fieldNames[4] = "scrollSource";
   }
 
   /**
@@ -177,9 +183,9 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get source.
+   * @notice Get polygonSource.
    */
-  function getSource() internal view returns (string memory source) {
+  function getPolygonSource() internal view returns (string memory polygonSource) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
@@ -187,9 +193,9 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get source.
+   * @notice Get polygonSource.
    */
-  function _getSource() internal view returns (string memory source) {
+  function _getPolygonSource() internal view returns (string memory polygonSource) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
@@ -197,27 +203,27 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Set source.
+   * @notice Set polygonSource.
    */
-  function setSource(string memory source) internal {
+  function setPolygonSource(string memory polygonSource) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((source)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((polygonSource)));
   }
 
   /**
-   * @notice Set source.
+   * @notice Set polygonSource.
    */
-  function _setSource(string memory source) internal {
+  function _setPolygonSource(string memory polygonSource) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((source)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((polygonSource)));
   }
 
   /**
-   * @notice Get the length of source.
+   * @notice Get the length of polygonSource.
    */
-  function lengthSource() internal view returns (uint256) {
+  function lengthPolygonSource() internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     uint256 _byteLength = StoreSwitch.getDynamicFieldLength(_tableId, _keyTuple, 0);
@@ -227,9 +233,9 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get the length of source.
+   * @notice Get the length of polygonSource.
    */
-  function _lengthSource() internal view returns (uint256) {
+  function _lengthPolygonSource() internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 0);
@@ -239,10 +245,10 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get an item of source.
+   * @notice Get an item of polygonSource.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemSource(uint256 _index) internal view returns (string memory) {
+  function getItemPolygonSource(uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     unchecked {
@@ -252,10 +258,10 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Get an item of source.
+   * @notice Get an item of polygonSource.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemSource(uint256 _index) internal view returns (string memory) {
+  function _getItemPolygonSource(uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     unchecked {
@@ -265,45 +271,45 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Push a slice to source.
+   * @notice Push a slice to polygonSource.
    */
-  function pushSource(string memory _slice) internal {
+  function pushPolygonSource(string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreSwitch.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
 
   /**
-   * @notice Push a slice to source.
+   * @notice Push a slice to polygonSource.
    */
-  function _pushSource(string memory _slice) internal {
+  function _pushPolygonSource(string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.pushToDynamicField(_tableId, _keyTuple, 0, bytes((_slice)));
   }
 
   /**
-   * @notice Pop a slice from source.
+   * @notice Pop a slice from polygonSource.
    */
-  function popSource() internal {
+  function popPolygonSource() internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreSwitch.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
-   * @notice Pop a slice from source.
+   * @notice Pop a slice from polygonSource.
    */
-  function _popSource() internal {
+  function _popPolygonSource() internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     StoreCore.popFromDynamicField(_tableId, _keyTuple, 0, 1);
   }
 
   /**
-   * @notice Update a slice of source at `_index`.
+   * @notice Update a slice of polygonSource at `_index`.
    */
-  function updateSource(uint256 _index, string memory _slice) internal {
+  function updatePolygonSource(uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     unchecked {
@@ -313,14 +319,310 @@ library ChainLinkConfig {
   }
 
   /**
-   * @notice Update a slice of source at `_index`.
+   * @notice Update a slice of polygonSource at `_index`.
    */
-  function _updateSource(uint256 _index, string memory _slice) internal {
+  function _updatePolygonSource(uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](0);
 
     unchecked {
       bytes memory _encoded = bytes((_slice));
       StoreCore.spliceDynamicData(_tableId, _keyTuple, 0, uint40(_index * 1), uint40(_encoded.length), _encoded);
+    }
+  }
+
+  /**
+   * @notice Get optimismSource.
+   */
+  function getOptimismSource() internal view returns (string memory optimismSource) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 1);
+    return (string(_blob));
+  }
+
+  /**
+   * @notice Get optimismSource.
+   */
+  function _getOptimismSource() internal view returns (string memory optimismSource) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 1);
+    return (string(_blob));
+  }
+
+  /**
+   * @notice Set optimismSource.
+   */
+  function setOptimismSource(string memory optimismSource) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 1, bytes((optimismSource)));
+  }
+
+  /**
+   * @notice Set optimismSource.
+   */
+  function _setOptimismSource(string memory optimismSource) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.setDynamicField(_tableId, _keyTuple, 1, bytes((optimismSource)));
+  }
+
+  /**
+   * @notice Get the length of optimismSource.
+   */
+  function lengthOptimismSource() internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    uint256 _byteLength = StoreSwitch.getDynamicFieldLength(_tableId, _keyTuple, 1);
+    unchecked {
+      return _byteLength / 1;
+    }
+  }
+
+  /**
+   * @notice Get the length of optimismSource.
+   */
+  function _lengthOptimismSource() internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 1);
+    unchecked {
+      return _byteLength / 1;
+    }
+  }
+
+  /**
+   * @notice Get an item of optimismSource.
+   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
+   */
+  function getItemOptimismSource(uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 1, _index * 1, (_index + 1) * 1);
+      return (string(_blob));
+    }
+  }
+
+  /**
+   * @notice Get an item of optimismSource.
+   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
+   */
+  function _getItemOptimismSource(uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 1, _index * 1, (_index + 1) * 1);
+      return (string(_blob));
+    }
+  }
+
+  /**
+   * @notice Push a slice to optimismSource.
+   */
+  function pushOptimismSource(string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.pushToDynamicField(_tableId, _keyTuple, 1, bytes((_slice)));
+  }
+
+  /**
+   * @notice Push a slice to optimismSource.
+   */
+  function _pushOptimismSource(string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.pushToDynamicField(_tableId, _keyTuple, 1, bytes((_slice)));
+  }
+
+  /**
+   * @notice Pop a slice from optimismSource.
+   */
+  function popOptimismSource() internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.popFromDynamicField(_tableId, _keyTuple, 1, 1);
+  }
+
+  /**
+   * @notice Pop a slice from optimismSource.
+   */
+  function _popOptimismSource() internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.popFromDynamicField(_tableId, _keyTuple, 1, 1);
+  }
+
+  /**
+   * @notice Update a slice of optimismSource at `_index`.
+   */
+  function updateOptimismSource(uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _encoded = bytes((_slice));
+      StoreSwitch.spliceDynamicData(_tableId, _keyTuple, 1, uint40(_index * 1), uint40(_encoded.length), _encoded);
+    }
+  }
+
+  /**
+   * @notice Update a slice of optimismSource at `_index`.
+   */
+  function _updateOptimismSource(uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _encoded = bytes((_slice));
+      StoreCore.spliceDynamicData(_tableId, _keyTuple, 1, uint40(_index * 1), uint40(_encoded.length), _encoded);
+    }
+  }
+
+  /**
+   * @notice Get scrollSource.
+   */
+  function getScrollSource() internal view returns (string memory scrollSource) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 2);
+    return (string(_blob));
+  }
+
+  /**
+   * @notice Get scrollSource.
+   */
+  function _getScrollSource() internal view returns (string memory scrollSource) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 2);
+    return (string(_blob));
+  }
+
+  /**
+   * @notice Set scrollSource.
+   */
+  function setScrollSource(string memory scrollSource) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 2, bytes((scrollSource)));
+  }
+
+  /**
+   * @notice Set scrollSource.
+   */
+  function _setScrollSource(string memory scrollSource) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.setDynamicField(_tableId, _keyTuple, 2, bytes((scrollSource)));
+  }
+
+  /**
+   * @notice Get the length of scrollSource.
+   */
+  function lengthScrollSource() internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    uint256 _byteLength = StoreSwitch.getDynamicFieldLength(_tableId, _keyTuple, 2);
+    unchecked {
+      return _byteLength / 1;
+    }
+  }
+
+  /**
+   * @notice Get the length of scrollSource.
+   */
+  function _lengthScrollSource() internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    uint256 _byteLength = StoreCore.getDynamicFieldLength(_tableId, _keyTuple, 2);
+    unchecked {
+      return _byteLength / 1;
+    }
+  }
+
+  /**
+   * @notice Get an item of scrollSource.
+   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
+   */
+  function getItemScrollSource(uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 2, _index * 1, (_index + 1) * 1);
+      return (string(_blob));
+    }
+  }
+
+  /**
+   * @notice Get an item of scrollSource.
+   * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
+   */
+  function _getItemScrollSource(uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 2, _index * 1, (_index + 1) * 1);
+      return (string(_blob));
+    }
+  }
+
+  /**
+   * @notice Push a slice to scrollSource.
+   */
+  function pushScrollSource(string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.pushToDynamicField(_tableId, _keyTuple, 2, bytes((_slice)));
+  }
+
+  /**
+   * @notice Push a slice to scrollSource.
+   */
+  function _pushScrollSource(string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.pushToDynamicField(_tableId, _keyTuple, 2, bytes((_slice)));
+  }
+
+  /**
+   * @notice Pop a slice from scrollSource.
+   */
+  function popScrollSource() internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreSwitch.popFromDynamicField(_tableId, _keyTuple, 2, 1);
+  }
+
+  /**
+   * @notice Pop a slice from scrollSource.
+   */
+  function _popScrollSource() internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    StoreCore.popFromDynamicField(_tableId, _keyTuple, 2, 1);
+  }
+
+  /**
+   * @notice Update a slice of scrollSource at `_index`.
+   */
+  function updateScrollSource(uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _encoded = bytes((_slice));
+      StoreSwitch.spliceDynamicData(_tableId, _keyTuple, 2, uint40(_index * 1), uint40(_encoded.length), _encoded);
+    }
+  }
+
+  /**
+   * @notice Update a slice of scrollSource at `_index`.
+   */
+  function _updateScrollSource(uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](0);
+
+    unchecked {
+      bytes memory _encoded = bytes((_slice));
+      StoreCore.spliceDynamicData(_tableId, _keyTuple, 2, uint40(_index * 1), uint40(_encoded.length), _encoded);
     }
   }
 
@@ -355,11 +657,17 @@ library ChainLinkConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(uint64 subscriptionId, uint32 callbackGasLimit, string memory source) internal {
+  function set(
+    uint64 subscriptionId,
+    uint32 callbackGasLimit,
+    string memory polygonSource,
+    string memory optimismSource,
+    string memory scrollSource
+  ) internal {
     bytes memory _staticData = encodeStatic(subscriptionId, callbackGasLimit);
 
-    PackedCounter _encodedLengths = encodeLengths(source);
-    bytes memory _dynamicData = encodeDynamic(source);
+    PackedCounter _encodedLengths = encodeLengths(polygonSource, optimismSource, scrollSource);
+    bytes memory _dynamicData = encodeDynamic(polygonSource, optimismSource, scrollSource);
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -369,11 +677,17 @@ library ChainLinkConfig {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(uint64 subscriptionId, uint32 callbackGasLimit, string memory source) internal {
+  function _set(
+    uint64 subscriptionId,
+    uint32 callbackGasLimit,
+    string memory polygonSource,
+    string memory optimismSource,
+    string memory scrollSource
+  ) internal {
     bytes memory _staticData = encodeStatic(subscriptionId, callbackGasLimit);
 
-    PackedCounter _encodedLengths = encodeLengths(source);
-    bytes memory _dynamicData = encodeDynamic(source);
+    PackedCounter _encodedLengths = encodeLengths(polygonSource, optimismSource, scrollSource);
+    bytes memory _dynamicData = encodeDynamic(polygonSource, optimismSource, scrollSource);
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -386,8 +700,8 @@ library ChainLinkConfig {
   function set(ChainLinkConfigData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.subscriptionId, _table.callbackGasLimit);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.source);
-    bytes memory _dynamicData = encodeDynamic(_table.source);
+    PackedCounter _encodedLengths = encodeLengths(_table.polygonSource, _table.optimismSource, _table.scrollSource);
+    bytes memory _dynamicData = encodeDynamic(_table.polygonSource, _table.optimismSource, _table.scrollSource);
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -400,8 +714,8 @@ library ChainLinkConfig {
   function _set(ChainLinkConfigData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.subscriptionId, _table.callbackGasLimit);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.source);
-    bytes memory _dynamicData = encodeDynamic(_table.source);
+    PackedCounter _encodedLengths = encodeLengths(_table.polygonSource, _table.optimismSource, _table.scrollSource);
+    bytes memory _dynamicData = encodeDynamic(_table.polygonSource, _table.optimismSource, _table.scrollSource);
 
     bytes32[] memory _keyTuple = new bytes32[](0);
 
@@ -423,13 +737,25 @@ library ChainLinkConfig {
   function decodeDynamic(
     PackedCounter _encodedLengths,
     bytes memory _blob
-  ) internal pure returns (string memory source) {
+  ) internal pure returns (string memory polygonSource, string memory optimismSource, string memory scrollSource) {
     uint256 _start;
     uint256 _end;
     unchecked {
       _end = _encodedLengths.atIndex(0);
     }
-    source = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    polygonSource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+    _start = _end;
+    unchecked {
+      _end += _encodedLengths.atIndex(1);
+    }
+    optimismSource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+
+    _start = _end;
+    unchecked {
+      _end += _encodedLengths.atIndex(2);
+    }
+    scrollSource = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /**
@@ -445,7 +771,7 @@ library ChainLinkConfig {
   ) internal pure returns (ChainLinkConfigData memory _table) {
     (_table.subscriptionId, _table.callbackGasLimit) = decodeStatic(_staticData);
 
-    (_table.source) = decodeDynamic(_encodedLengths, _dynamicData);
+    (_table.polygonSource, _table.optimismSource, _table.scrollSource) = decodeDynamic(_encodedLengths, _dynamicData);
   }
 
   /**
@@ -478,10 +804,18 @@ library ChainLinkConfig {
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(string memory source) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(
+    string memory polygonSource,
+    string memory optimismSource,
+    string memory scrollSource
+  ) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(bytes(source).length);
+      _encodedLengths = PackedCounterLib.pack(
+        bytes(polygonSource).length,
+        bytes(optimismSource).length,
+        bytes(scrollSource).length
+      );
     }
   }
 
@@ -489,8 +823,12 @@ library ChainLinkConfig {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(string memory source) internal pure returns (bytes memory) {
-    return abi.encodePacked(bytes((source)));
+  function encodeDynamic(
+    string memory polygonSource,
+    string memory optimismSource,
+    string memory scrollSource
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(bytes((polygonSource)), bytes((optimismSource)), bytes((scrollSource)));
   }
 
   /**
@@ -502,12 +840,14 @@ library ChainLinkConfig {
   function encode(
     uint64 subscriptionId,
     uint32 callbackGasLimit,
-    string memory source
+    string memory polygonSource,
+    string memory optimismSource,
+    string memory scrollSource
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData = encodeStatic(subscriptionId, callbackGasLimit);
 
-    PackedCounter _encodedLengths = encodeLengths(source);
-    bytes memory _dynamicData = encodeDynamic(source);
+    PackedCounter _encodedLengths = encodeLengths(polygonSource, optimismSource, scrollSource);
+    bytes memory _dynamicData = encodeDynamic(polygonSource, optimismSource, scrollSource);
 
     return (_staticData, _encodedLengths, _dynamicData);
   }

@@ -8,7 +8,7 @@ import {ResourceId, ResourceIdLib} from "@latticexyz/store/src/ResourceId.sol";
 import {WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE} from "@latticexyz/store/src/storeResourceTypes.sol";
 import {ERC721Registration} from "../src/aweiToken/ERC721Registration.sol";
-import {TxHashToChainLinkRequest, ChainLinkRequest, Config} from "../src/codegen/index.sol";
+import {TxHashToChainLinkRequest, ChainLinkRequest, Config, ChainLinkConfig} from "../src/codegen/index.sol";
 import { StoreSwitch } from "@latticexyz/store/src/StoreSwitch.sol";
 
 import "forge-std/console.sol";
@@ -34,6 +34,10 @@ contract PostDeploy is Script {
 
         Config.setEpochStart(block.timestamp - (block.timestamp % (1 weeks)));
         Config.setEpochPeriod(1 weeks);
+
+        ChainLinkConfig.setPolygonSource(vm.readFile("script/functions/provePolygon.source.js"));
+        ChainLinkConfig.setScrollSource(vm.readFile("script/functions/proveScroll.source.js"));
+        ChainLinkConfig.setOptimismSource(vm.readFile("script/functions/proveOptimism.source.js"));
 
         vm.stopBroadcast();
 

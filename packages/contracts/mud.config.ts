@@ -3,7 +3,7 @@ import { mudConfig } from "@latticexyz/world/register";
 const ADMINS = [process.env.ADDRESS as string];
 
 export default mudConfig({
-  excludeSystems: ["ChainLinkFunctionSystem"],
+  // excludeSystems: ["ChainLinkFunctionSystem"],
   enums: {
     VoteType: ["ADD", "REMOVE"],
   },
@@ -25,7 +25,9 @@ export default mudConfig({
       valueSchema: {
         subscriptionId: "uint64",
         callbackGasLimit: "uint32",
-        source: "string",
+        polygonSource: "string",
+        optimismSource: "string",
+        scrollSource: "string",
       },
     },
     Config: {
@@ -107,6 +109,7 @@ export default mudConfig({
     Game: {
       keySchema: {
         key: "address",
+        chainId: "uint256",
       },
       valueSchema: "bool",
     },
