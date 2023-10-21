@@ -29,14 +29,12 @@ const sender = data.result.from;
 const to = data.result.to;
 
 function pad(content) {
-  return Buffer.from(
-    "0".repeat(66 - content.length) + content.replace("0x", ""),
-    "hex"
-  );
+  return Buffer.from("0".repeat(66 - content.length) + content.replace("0x", ""), "hex");
 }
 
 const encodedSender = pad(sender);
 const encodedTo = pad(to);
 const encodedGasUsed = pad(gasUsed);
+const chainId = pad("0x89");
 
-return Buffer.concat([encodedSender, encodedTo, encodedGasUsed]);
+return Buffer.concat([encodedSender, encodedTo, encodedGasUsed, chainId]);
